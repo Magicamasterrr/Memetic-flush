@@ -46,3 +46,19 @@ contract MemeticFlush {
     );
     event WinningsPulled(
         uint256 indexed cycle,
+        address indexed who,
+        uint256 amountWei
+    );
+    event NewCycleOpened(uint256 indexed cycle, uint256 startBlock);
+
+    error DrainWindowNotReached();
+    error CycleHasNoTickets();
+    error CallerNotDrainer();
+    error CallerNotWinner();
+    error WinningsAlreadyPulled();
+    error InvalidTicketCount();
+    error StakeWeiMismatch();
+    error CycleNotDrained();
+    error ReentrancyDetected();
+    error NewCycleTooSoon();
+    error CycleAlreadyDrained();
