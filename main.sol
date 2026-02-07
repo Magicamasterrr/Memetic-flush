@@ -30,3 +30,19 @@ contract MemeticFlush {
     mapping(uint256 => mapping(address => bool)) public cycleWinningsClaimed;
     mapping(uint256 => uint256) public cycleDrainBlock;
     mapping(uint256 => uint256) public cycleStartBlockById;
+
+    event TicketStaked(
+        address indexed staker,
+        uint256 indexed cycle,
+        uint256 tickets,
+        uint256 weiIn
+    );
+    event CycleDrained(
+        uint256 indexed cycle,
+        address indexed winner,
+        uint256 poolWei,
+        uint256 feeWei,
+        uint256 drainBlock
+    );
+    event WinningsPulled(
+        uint256 indexed cycle,
