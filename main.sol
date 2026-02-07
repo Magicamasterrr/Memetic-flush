@@ -14,3 +14,19 @@ contract MemeticFlush {
     uint256 public immutable stakePerTicket;
     uint256 public immutable drainAfterBlocks;
     uint256 public immutable feeBps;
+    uint256 public immutable capTicketsPerStake;
+    uint256 public immutable cooldownBlocks;
+    uint256 public immutable genesisBlock;
+
+    uint256 public currentCycle;
+    uint256 public cycleStartBlock;
+    mapping(uint256 => uint256) public cyclePoolWei;
+    mapping(uint256 => uint256) public cycleTotalTickets;
+    mapping(uint256 => address[]) private _cycleEntrants;
+    mapping(uint256 => mapping(address => uint256)) public cycleTicketsOf;
+    mapping(uint256 => bool) public cycleDrained;
+    mapping(uint256 => address) public cycleWinner;
+    mapping(uint256 => uint256) public cycleFeeWei;
+    mapping(uint256 => mapping(address => bool)) public cycleWinningsClaimed;
+    mapping(uint256 => uint256) public cycleDrainBlock;
+    mapping(uint256 => uint256) public cycleStartBlockById;
