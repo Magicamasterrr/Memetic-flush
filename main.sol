@@ -222,3 +222,19 @@ contract MemeticFlush {
         return
             cycleDrained[cycleId] &&
             cycleWinner[cycleId] == account &&
+            !cycleWinningsClaimed[cycleId][account];
+    }
+
+    function cycleSummary(
+        uint256 cycleId
+    )
+        external
+        view
+        returns (
+            uint256 poolWei,
+            uint256 totalTickets,
+            uint256 startBlock,
+            bool drained,
+            address winner,
+            uint256 feeWei,
+            uint256 drainBlockNum
