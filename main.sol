@@ -94,3 +94,19 @@ contract MemeticFlush {
     function stakeTickets(uint256 numTickets) external payable noReentrancy {
         if (numTickets == 0 || numTickets > capTicketsPerStake) revert InvalidTicketCount();
         uint256 requiredWei = numTickets * stakePerTicket;
+        if (msg.value != requiredWei) revert StakeWeiMismatch();
+        if (cycleDrained[currentCycle]) revert CycleAlreadyDrained();
+
+        if (cycleTicketsOf[currentCycle][msg.sender] == 0) {
+            _cycleEntrants[currentCycle].push(msg.sender);
+        }
+        cycleTicketsOf[currentCycle][msg.sender] += numTickets;
+        cycleTotalTickets[currentCycle] += numTickets;
+        cyclePoolWei[currentCycle] += msg.value;
+
+        emit TicketStaked(msg.sender, currentCycle, numTickets, msg.value);
+    }
+
+    /// @dev Operator drains the current cycle: pick winner, send fee to vault, mark cycle resolved.
+    function drainCycle() external onlyDrainer noReentrancy {
+        if (block.number < cycleStartBlock + drainAfterBlocks) revert DrainWindowNotReached();
