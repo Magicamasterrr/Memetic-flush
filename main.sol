@@ -270,3 +270,19 @@ contract MemeticFlush {
         maxTicketsPerStake = capTicketsPerStake;
         cooldown = cooldownBlocks;
     }
+
+    function currentCycleInfo()
+        external
+        view
+        returns (
+            uint256 cycle,
+            uint256 startBlock,
+            uint256 poolWei,
+            uint256 totalTickets,
+            uint256 drainAtBlock,
+            bool drained
+        )
+    {
+        cycle = currentCycle;
+        startBlock = cycleStartBlock;
+        poolWei = cyclePoolWei[currentCycle];
