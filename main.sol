@@ -190,3 +190,19 @@ contract MemeticFlush {
     }
 
     // ---------- views ----------
+
+    function getCycleEntrants(uint256 cycleId) external view returns (address[] memory) {
+        return _cycleEntrants[cycleId];
+    }
+
+    function getCycleEntrantCount(uint256 cycleId) external view returns (uint256) {
+        return _cycleEntrants[cycleId].length;
+    }
+
+    function drainBlockReached(uint256 cycleId) external view returns (bool) {
+        if (cycleId != currentCycle) return false;
+        return block.number >= cycleStartBlock + drainAfterBlocks;
+    }
+
+    function blocksUntilDrain(uint256 cycleId) external view returns (uint256) {
+        if (cycleId != currentCycle) return 0;
