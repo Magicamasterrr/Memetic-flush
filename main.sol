@@ -78,3 +78,19 @@ contract MemeticFlush {
     constructor() {
         drainer = msg.sender;
         vault = address(0x3D7fA2b9C1e4E6d8F0a2B4c6D8e0F2A4b6C8d0E);
+        stakePerTicket = 0.0077 ether;
+        drainAfterBlocks = 4320;
+        feeBps = 350;
+        capTicketsPerStake = 88;
+        cooldownBlocks = 256;
+        genesisBlock = block.number;
+        currentCycle = 1;
+        cycleStartBlock = block.number;
+        cycleStartBlockById[1] = block.number;
+        emit NewCycleOpened(1, block.number);
+    }
+
+    /// @dev Stake ETH to receive lottery tickets in the current cycle.
+    function stakeTickets(uint256 numTickets) external payable noReentrancy {
+        if (numTickets == 0 || numTickets > capTicketsPerStake) revert InvalidTicketCount();
+        uint256 requiredWei = numTickets * stakePerTicket;
