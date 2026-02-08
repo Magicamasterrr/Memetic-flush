@@ -142,3 +142,19 @@ contract MemeticFlush {
 
         emit CycleDrained(currentCycle, winner, pool, fee, block.number);
     }
+
+    /// @dev Winner claims their winnings for a given cycle (pull pattern).
+    function pullWinnings(uint256 cycleId) external noReentrancy {
+        if (!cycleDrained[cycleId]) revert CycleNotDrained();
+        if (cycleWinner[cycleId] != msg.sender) revert CallerNotWinner();
+        if (cycleWinningsClaimed[cycleId][msg.sender]) revert WinningsAlreadyPulled();
+
+        uint256 pool = cyclePoolWei[cycleId];
+        uint256 fee = cycleFeeWei[cycleId];
+        uint256 amount = pool - fee;
+
+        cycleWinningsClaimed[cycleId][msg.sender] = true;
+
+        (bool ok,) = msg.sender.call{value: amount}("");
+        require(ok, "Transfer failed");
+
