@@ -126,3 +126,19 @@ contract MemeticFlush {
                     cycleTotalTickets[currentCycle]
                 )
             )
+        );
+        uint256 winnerTicketIndex = seed % cycleTotalTickets[currentCycle];
+        address winner = _resolveWinnerByTicketIndex(currentCycle, winnerTicketIndex);
+
+        cycleDrained[currentCycle] = true;
+        cycleWinner[currentCycle] = winner;
+        cycleFeeWei[currentCycle] = fee;
+        cycleDrainBlock[currentCycle] = block.number;
+
+        if (fee > 0) {
+            (bool sent,) = vault.call{value: fee}("");
+            require(sent, "Fee transfer failed");
+        }
+
+        emit CycleDrained(currentCycle, winner, pool, fee, block.number);
+    }
