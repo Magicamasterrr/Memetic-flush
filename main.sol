@@ -174,3 +174,19 @@ contract MemeticFlush {
         emit NewCycleOpened(currentCycle, block.number);
     }
 
+    function _resolveWinnerByTicketIndex(
+        uint256 cycle,
+        uint256 ticketIndex
+    ) internal view returns (address) {
+        address[] memory entrants = _cycleEntrants[cycle];
+        uint256 cursor;
+        for (uint256 i; i < entrants.length; ) {
+            uint256 count = cycleTicketsOf[cycle][entrants[i]];
+            if (ticketIndex < cursor + count) return entrants[i];
+            cursor += count;
+            unchecked { i++; }
+        }
+        return entrants[entrants.length - 1];
+    }
+
+    // ---------- views ----------
