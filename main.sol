@@ -206,3 +206,19 @@ contract MemeticFlush {
 
     function blocksUntilDrain(uint256 cycleId) external view returns (uint256) {
         if (cycleId != currentCycle) return 0;
+        uint256 target = cycleStartBlock + drainAfterBlocks;
+        if (block.number >= target) return 0;
+        return target - block.number;
+    }
+
+    function winningsAmount(uint256 cycleId) external view returns (uint256) {
+        if (!cycleDrained[cycleId]) return 0;
+        uint256 pool = cyclePoolWei[cycleId];
+        uint256 fee = cycleFeeWei[cycleId];
+        return pool - fee;
+    }
+
+    function canClaimWinnings(address account, uint256 cycleId) external view returns (bool) {
+        return
+            cycleDrained[cycleId] &&
+            cycleWinner[cycleId] == account &&
