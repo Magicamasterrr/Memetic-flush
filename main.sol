@@ -158,3 +158,19 @@ contract MemeticFlush {
         (bool ok,) = msg.sender.call{value: amount}("");
         require(ok, "Transfer failed");
 
+        emit WinningsPulled(cycleId, msg.sender, amount);
+    }
+
+    /// @dev Operator starts a new cycle after cooldown.
+    function openNewCycle() external onlyDrainer {
+        if (!cycleDrained[currentCycle] && cycleTotalTickets[currentCycle] > 0) {
+            revert DrainWindowNotReached();
+        }
+        if (block.number < cycleStartBlock + cooldownBlocks) revert NewCycleTooSoon();
+
+        currentCycle++;
+        cycleStartBlock = block.number;
+        cycleStartBlockById[currentCycle] = block.number;
+        emit NewCycleOpened(currentCycle, block.number);
+    }
+
