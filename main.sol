@@ -62,3 +62,19 @@ contract MemeticFlush {
     error ReentrancyDetected();
     error NewCycleTooSoon();
     error CycleAlreadyDrained();
+
+    modifier noReentrancy() {
+        if (_reentrancySlot != 0) revert ReentrancyDetected();
+        _reentrancySlot = 1;
+        _;
+        _reentrancySlot = 0;
+    }
+
+    modifier onlyDrainer() {
+        if (msg.sender != drainer) revert CallerNotDrainer();
+        _;
+    }
+
+    constructor() {
+        drainer = msg.sender;
+        vault = address(0x3D7fA2b9C1e4E6d8F0a2B4c6D8e0F2A4b6C8d0E);
