@@ -110,3 +110,19 @@ contract MemeticFlush {
     /// @dev Operator drains the current cycle: pick winner, send fee to vault, mark cycle resolved.
     function drainCycle() external onlyDrainer noReentrancy {
         if (block.number < cycleStartBlock + drainAfterBlocks) revert DrainWindowNotReached();
+        if (cycleTotalTickets[currentCycle] == 0) revert CycleHasNoTickets();
+        if (cycleDrained[currentCycle]) revert CycleAlreadyDrained();
+
+        uint256 pool = cyclePoolWei[currentCycle];
+        uint256 fee = (pool * feeBps) / 10000;
+
+        uint256 seed = uint256(
+            keccak256(
+                abi.encodePacked(
+                    blockhash(block.number - 1),
+                    block.prevrandao,
+                    block.timestamp,
+                    currentCycle,
+                    cycleTotalTickets[currentCycle]
+                )
+            )
