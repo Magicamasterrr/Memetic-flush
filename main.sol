@@ -254,3 +254,19 @@ contract MemeticFlush {
         view
         returns (
             address drainerAddr,
+            address vaultAddr,
+            uint256 stakeWei,
+            uint256 drainBlocks,
+            uint256 feeBasisPoints,
+            uint256 maxTicketsPerStake,
+            uint256 cooldown
+        )
+    {
+        drainerAddr = drainer;
+        vaultAddr = vault;
+        stakeWei = stakePerTicket;
+        drainBlocks = drainAfterBlocks;
+        feeBasisPoints = feeBps;
+        maxTicketsPerStake = capTicketsPerStake;
+        cooldown = cooldownBlocks;
+    }
