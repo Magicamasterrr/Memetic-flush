@@ -238,3 +238,19 @@ contract MemeticFlush {
             address winner,
             uint256 feeWei,
             uint256 drainBlockNum
+        )
+    {
+        poolWei = cyclePoolWei[cycleId];
+        totalTickets = cycleTotalTickets[cycleId];
+        startBlock = cycleStartBlockById[cycleId];
+        drained = cycleDrained[cycleId];
+        winner = cycleWinner[cycleId];
+        feeWei = cycleFeeWei[cycleId];
+        drainBlockNum = cycleDrainBlock[cycleId];
+    }
+
+    function config()
+        external
+        view
+        returns (
+            address drainerAddr,
