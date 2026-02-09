@@ -318,3 +318,19 @@ contract MemeticFlush {
             winners[i] = cycleWinner[c];
             unchecked { i++; }
         }
+    }
+
+    function myTicketsInCycle(address account, uint256 cycleId) external view returns (uint256) {
+        return cycleTicketsOf[cycleId][account];
+    }
+
+    function isDrainer(address account) external view returns (bool) {
+        return account == drainer;
+    }
+
+    function protocolFeeForCycle(uint256 cycleId) external view returns (uint256) {
+        return cycleFeeWei[cycleId];
+    }
+
+    receive() external payable {
+        revert("Use stakeTickets");
