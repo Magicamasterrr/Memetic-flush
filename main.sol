@@ -286,3 +286,19 @@ contract MemeticFlush {
         cycle = currentCycle;
         startBlock = cycleStartBlock;
         poolWei = cyclePoolWei[currentCycle];
+        totalTickets = cycleTotalTickets[currentCycle];
+        drainAtBlock = cycleStartBlock + drainAfterBlocks;
+        drained = cycleDrained[currentCycle];
+    }
+
+    function getCyclesBatch(
+        uint256 fromCycle,
+        uint256 toCycle
+    )
+        external
+        view
+        returns (
+            uint256[] memory pools,
+            uint256[] memory tickets,
+            bool[] memory drainedFlags,
+            address[] memory winners
