@@ -302,3 +302,19 @@ contract MemeticFlush {
             uint256[] memory tickets,
             bool[] memory drainedFlags,
             address[] memory winners
+        )
+    {
+        if (toCycle < fromCycle) toCycle = fromCycle;
+        uint256 n = toCycle - fromCycle + 1;
+        pools = new uint256[](n);
+        tickets = new uint256[](n);
+        drainedFlags = new bool[](n);
+        winners = new address[](n);
+        for (uint256 i; i < n; ) {
+            uint256 c = fromCycle + i;
+            pools[i] = cyclePoolWei[c];
+            tickets[i] = cycleTotalTickets[c];
+            drainedFlags[i] = cycleDrained[c];
+            winners[i] = cycleWinner[c];
+            unchecked { i++; }
+        }
