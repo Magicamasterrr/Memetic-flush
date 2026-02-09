@@ -334,3 +334,5 @@ contract MemeticFlush {
 
     receive() external payable {
         revert("Use stakeTickets");
+    }
+}
